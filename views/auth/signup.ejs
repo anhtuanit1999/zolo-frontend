@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!------ Include the above in your HEAD tag ---------->
+  <link rel='stylesheet' href='/stylesheets/signup.css' />
+  <title>Document</title>
+</head>
+
+<body>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+
+  <div class="container">
+    <br>
+    <p class="text-center">Chat app zolo <a href="/"> trang chủ</a></p>
+    <hr>
+    <div class="card bg-light">
+      <article class="card-body mx-auto" style="max-width: 400px;">
+        <h4 class="card-title mt-3 text-center">Tạo tài khoản</h4>
+        <p class="text-center">Bắt đầu với tài khoản hoàn toàn miễn phí</p>
+        <p>
+          <a href="" class="btn btn-block btn-gmail text-hover"> <i class="fab fa-google"></i>   Đăng nhập với Gmail</a>
+          <a href="" class="btn btn-block btn-facebook text-hover"> <i class="fab fa-facebook-f"></i>   Đăng nhập với facebook</a>
+        </p>
+        <p class="divider-text">
+          <span class="bg-light">OR</span>
+        </p>
+        <form action="/auth/signup" method="post" enctype="multipart/form-data">
+          <!-- form-group// fullName-->
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input id="txtFullName" name="fullName" class="form-control" placeholder="Full name" type="text" title="Full name">
+          </div>
+          <!-- form-group// nickname-->
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input id="txtNickName" name="nickname" class="form-control" placeholder="Nick name" type="text" title="Nick name">
+          </div>
+          <!-- form-group// email-->
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+            </div>
+            <input id="txtEmail" name="email" class="form-control" placeholder="Email address" type="email" title="Email">
+          </div>
+          <!-- form-group// phone-->
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+            </div>
+            <input id="txtPhone" name="phone" class="form-control" placeholder="Phone number" type="text" title="Phone number">
+          </div>
+          <!-- form-group// birthday-->
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+            </div>
+            <input id="dateBirthday" name="birthday" class="form-control" type="date" title="Your birthday">
+          </div>
+          <!-- form-group password// -->
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+            </div>
+            <input id="txtPassword" name="password" class="form-control" placeholder="Password" type="password">
+          </div>
+          <!-- form-group// submit-->
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block"> Tạo tài khoản  </button>
+          </div>
+          <!-- form-group// -->
+          <p class="text-center">Đã có tài khoản? <a href="">Đăng nhập</a> </p>
+        </form>
+      </article>
+    </div>
+    <!-- card.// -->
+
+  </div>
+  <!--container end.//-->
+
+  <br><br>
+  <script>
+    const checkFullName = () => {
+      if (/[A-Z][a-z]+(\s[A-Z][a-z]*)*/.test($('#txtFullName').val())) {
+        return true;
+      }
+      alert('FullName bắt buộc ký tự đầu là là chữ hoa theo sau là ký tự thường');
+      return false;
+    };
+
+    const checkNickName = () => {
+      if (/[A-Z][a-z]+(\s[A-Z][a-z]*)*/.test($('#txtNickName').val())) {
+        return true;
+      }
+      alert('NickName bắt buộc ký tự đầu là là chữ hoa theo sau là ký tự thường');
+      return false;
+    }
+
+    const checkEmail = () => {
+      const res = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (res.test($('#txtEmail').val())) {
+        return true;
+      }
+      alert('Email không hợp lệ');
+      return false;
+    }
+
+    const checkPhone = () => {
+      if (/0\d{9}/.test($('#txtPhone').val())) {
+        return true;
+      }
+      alert('Phone bắt buộc có 10 chữ số và bắt đầu bằng số 0');
+      return false;
+    }
+
+    const checkPassword = () => {
+      if (/[a-zA-Z0-9]{6,}/.test($('#txtPassword').val())) {
+        return true;
+      }
+      alert('Password chứa chữ hoa, thường hoặc chữ số. Không chưa ký tự đặc biệt.');
+      return false;
+    }
+
+    const setDefaultDate = () => {
+      const date = new Date();
+      date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+      return date.toJSON().slice(0, 10);
+    }
+
+    $(document).ready(() => {
+      $('#txtFullName').blur(checkFullName);
+      $('#txtNickName').blur(checkNickName);
+      $('#txtEmail').blur(checkEmail);
+      $('#txtPhone').blur(checkPhone);
+      $('#dateBirthday').val(setDefaultDate());
+      $('#txtPassword').blur(checkPassword);
+    });
+  </script>
+</body>
+
+</html>
