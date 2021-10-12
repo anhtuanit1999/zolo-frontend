@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!------ Include the above in your HEAD tag ---------->
+  <link rel='stylesheet' href='/stylesheets/signup.css' />
+  <title>
+    <%=title%>
+  </title>
+</head>
+
+<body>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+
+  <div class="container">
+    <br>
+    <p class="text-center">Chat app zolo
+      <a href="/">
+        Trang chủ
+      </a>
+    </p>
+    <hr>
+    <div class="card bg-light">
+      <article class="card-body mx-auto" style="max-width: 400px;">
+        <h4 class="card-title mt-3 text-center">Xác thực tài khoản</h4>
+        <p class="text-center">Bắt đầu với tài khoản hoàn toàn miễn phí</p>
+        <p>
+          <a href="" class="btn btn-block btn-gmail text-hover"> <i class="fab fa-google"></i>   Đăng nhập với Gmail</a>
+          <a href="" class="btn btn-block btn-facebook text-hover"> <i class="fab fa-facebook-f"></i>   Đăng nhập với facebook</a>
+        </p>
+        <p class="divider-text">
+          <span class="bg-light">OR</span>
+        </p>
+        <form action="/auth/verify" method="post" enctype="multipart/form-data">
+          <!-- form-group// OTP-->
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-check-circle"></i> </span>
+            </div>
+            <input id="txtOTP" name="otp" class="form-control" placeholder="OTP" title="OTP" required>
+          </div>
+          <!-- form-group// email-->
+          <input name="email" hidden="true" class="form-control" value="<%= query.email %>" required>
+          <!-- form-group// submit-->
+          <div class="form-group">
+            <button id="btnXacThuc" type="submit" class="btn btn-primary btn-block"> Xác thực  </button>
+          </div>
+          <!-- form-group// -->
+          <p class="text-center">Chưa có tài khoản? <a href="/auth/signup">Đăng ký</a> </p>
+        </form>
+      </article>
+    </div>
+    <!-- card.// -->
+
+  </div>
+  <!--container end.//-->
+
+  <br><br>
+  <script>
+    const checkOTP = () => {
+      const res = /[A-Z0-9]{6}/;
+      if (res.test($('#txtOTP').val())) {
+        return true;
+      }
+      alert('OTP không hợp lệ');
+      return false;
+    }
+
+    $(document).ready(() => {
+      $('#txtOTP').blur(checkOTP);
+      $('#txtOTP').keydown((e) => {
+        const key = e.which;
+        if (key == 13) $('#btnXacThuc').click();
+      });
+    });
+  </script>
+</body>
+
+</html>

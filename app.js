@@ -3,10 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const multer = require('multer');
+const converseJson = multer();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const signupRouter = require('./routes/auth/signup');
+const authRouter = require('./routes/auth/auth');
 
 var app = express();
 
@@ -16,9 +18,16 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(converseJson.fields([]));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(function(req, res, next) {
+  res.locals.query = req.query;
+  res.locals.url = req.originalUrl;
+
+  next();
+});
 
 // trang chủ
 app.use('/', indexRouter);
@@ -26,8 +35,8 @@ app.use('/', indexRouter);
 // user
 app.use('/users', usersRouter);
 
-// sign up
-app.use('/auth', signupRouter);
+// auth
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,6 +46,7 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
+  console.log(err);
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 

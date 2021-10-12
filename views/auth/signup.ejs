@@ -10,7 +10,9 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <!------ Include the above in your HEAD tag ---------->
   <link rel='stylesheet' href='/stylesheets/signup.css' />
-  <title>Document</title>
+  <title>
+    <%=title%>
+  </title>
 </head>
 
 <body>
@@ -38,28 +40,28 @@
             <div class="input-group-prepend">
               <span class="input-group-text"> <i class="fa fa-user"></i> </span>
             </div>
-            <input id="txtFullName" name="fullName" class="form-control" placeholder="Full name" type="text" title="Full name">
+            <input id="txtFullName" name="fullName" class="form-control" placeholder="Full name" type="text" title="Full name" required>
           </div>
           <!-- form-group// nickname-->
           <div class="form-group input-group">
             <div class="input-group-prepend">
               <span class="input-group-text"> <i class="fa fa-user"></i> </span>
             </div>
-            <input id="txtNickName" name="nickname" class="form-control" placeholder="Nick name" type="text" title="Nick name">
+            <input id="txtNickName" name="nickname" class="form-control" placeholder="Nick name" type="text" title="Nick name" required>
           </div>
           <!-- form-group// email-->
           <div class="form-group input-group">
             <div class="input-group-prepend">
               <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
             </div>
-            <input id="txtEmail" name="email" class="form-control" placeholder="Email address" type="email" title="Email">
+            <input id="txtEmail" name="email" class="form-control" placeholder="Email address" type="email" title="Email" required>
           </div>
           <!-- form-group// phone-->
           <div class="form-group input-group">
             <div class="input-group-prepend">
               <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
             </div>
-            <input id="txtPhone" name="phone" class="form-control" placeholder="Phone number" type="text" title="Phone number">
+            <input id="txtPhone" name="phone" class="form-control" placeholder="Phone number" type="text" title="Phone number" required>
           </div>
           <!-- form-group// birthday-->
           <div class="form-group input-group">
@@ -73,14 +75,14 @@
             <div class="input-group-prepend">
               <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
             </div>
-            <input id="txtPassword" name="password" class="form-control" placeholder="Password" type="password">
+            <input id="txtPassword" name="password" class="form-control" placeholder="Password" type="password" required>
           </div>
           <!-- form-group// submit-->
           <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block"> Tạo tài khoản  </button>
+            <button id="btnDangKy" type="submit" class="btn btn-primary btn-block"> Tạo tài khoản  </button>
           </div>
           <!-- form-group// -->
-          <p class="text-center">Đã có tài khoản? <a href="">Đăng nhập</a> </p>
+          <p class="text-center">Đã có tài khoản? <a href="/auth/signin">Đăng nhập</a> </p>
         </form>
       </article>
     </div>
@@ -145,6 +147,10 @@
       $('#txtPhone').blur(checkPhone);
       $('#dateBirthday').val(setDefaultDate());
       $('#txtPassword').blur(checkPassword);
+      $('#txtPassword').keydown((e) => {
+        const key = e.which;
+        if (key == 13) $('#btnDangKy').click();
+      });
     });
   </script>
 </body>
