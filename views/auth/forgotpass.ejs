@@ -25,7 +25,7 @@
     <hr>
     <div class="card bg-light">
       <article class="card-body mx-auto" style="max-width: 400px;">
-        <h4 class="card-title mt-3 text-center">Đăng nhập</h4>
+        <h4 class="card-title mt-3 text-center">Tạo tài khoản</h4>
         <p class="text-center">Bắt đầu với tài khoản hoàn toàn miễn phí</p>
         <p>
           <a href="" class="btn btn-block btn-gmail text-hover"> <i class="fab fa-google"></i>   Đăng nhập với Gmail</a>
@@ -34,30 +34,22 @@
         <p class="divider-text">
           <span class="bg-light">OR</span>
         </p>
-        <form action="/auth/signin" method="post" enctype="multipart/form-data">
+        <form action="/auth/forgotpassword" method="post" enctype="multipart/form-data">
           <!-- form-group// email-->
           <div class="form-group input-group">
             <div class="input-group-prepend">
               <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
             </div>
-            <% const mail = query.email ? query.email : ''; %>
-              <input id="txtEmail" name="email" class="form-control" placeholder="Email address" value="<%= mail %>" type="email" title="Email" required>
-          </div>
-          <!-- form-group password// -->
-          <div class="form-group input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-            </div>
-            <input id="txtPassword" name="password" class="form-control" placeholder="Password" type="password" required>
+            <input id="txtEmail" name="email" class="form-control" placeholder="Email address" value="<%= query.email %>" type="email" title="Email" required>
           </div>
           <!-- form-group// submit-->
           <div class="form-group">
-            <button id="btnDangNhap" type="button" class="btn btn-primary btn-block"> Đăng nhập  </button>
+            <button id="btnQuenMatKhau" type="submit" class="btn btn-primary btn-block"> Quên mật khẩu  </button>
           </div>
           <!-- form-group// -->
-          <p class="text-center">Chưa có tài khoản? <a href="/auth/signup">Đăng ký</a> </p>
+          <p class="text-center">Đã có tài khoản? <a href="/auth/signin">Đăng nhập</a> </p>
           <!-- form-group// -->
-          <p class="text-center"> <a href="/auth/forgotpassword">Quên mật khẩu?</a> </p>
+          <p class="text-center">Chưa có tài khoản? <a href="/auth/signup">Đăng ký</a> </p>
         </form>
       </article>
     </div>
@@ -77,40 +69,11 @@
       return false;
     }
 
-    const checkPassword = () => {
-      if (/[a-zA-Z0-9]{6,}/.test($('#txtPassword').val())) {
-        return true;
-      }
-      alert('Password chứa chữ hoa, thường hoặc chữ số. Không chưa ký tự đặc biệt.');
-      return false;
-    }
-
-    const signIn = () => {
-      if (!checkEmail() || !checkPassword) return;
-      $.ajax({
-        type: 'POST',
-        url: '/auth/signin',
-        data: {
-          email: $('#txtEmail').val(),
-          password: $('#txtPassword').val()
-        },
-        success: function(result, err, xhr) {
-          console.log('data ' + result.data, err, xhr);
-          if (xhr.responseJSON.code == 200) {
-            window.localStorage.setItem('accessToken', 'Bearer ' + xhr.responseJSON.jwt);
-            window.location.replace('/');
-          }
-        }
-      })
-    }
-
     $(document).ready(() => {
       $('#txtEmail').blur(checkEmail);
-      $('#txtPassword').blur(checkPassword);
-      $('#btnDangNhap').click(signIn);
-      $('#txtPassword').keydown((e) => {
+      $('#txtEmail').keydown((e) => {
         const key = e.which;
-        if (key == 13) $('#btnDangNhap').click();
+        if (key == 13) $('#btnQuenMatKhau').click();
       });
     });
   </script>

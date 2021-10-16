@@ -35,7 +35,6 @@ module.exports = {
       responseType: 'json'
     });
     if (result.data.code == 200) {
-      // window.localStorage.setItem('accessToken', 'Bearer ' + result.data.jwt);
       const data = {
         code: result.data.code,
         jwt: result.data.data.jwt
@@ -63,6 +62,7 @@ module.exports = {
   },
   reSendOTP: async(req, res) => {
     const { email } = req.body;
+    // Gửi tới API
     const result = await axios({
       method: 'POST',
       url: `${DOMAIN}/auth/resendotp`,
@@ -72,5 +72,35 @@ module.exports = {
       responseType: 'json'
     });
     return res.send({...result.data });
+  },
+  forgotPassword: async(req, res) => {
+    const { email } = req.body;
+    // Gửi tới API
+    const result = await axios({
+      method: 'POST',
+      url: `${DOMAIN}/auth/forgotpassword`,
+      data: {
+        email
+      },
+      responseType: 'json'
+    });
+    if (result.data.code == 200) return res.redirect('/auth/newpassword?email=' + email);
+    return res.redirect('/auth/forgotpassword?email=' + email);
+  },
+  newPassword: async(req, res) => {
+    const { email, password, otp } = req.body;
+    // Gửi tới API
+    const result = await axios({
+      method: 'POST',
+      url: `${DOMAIN}/auth/newpassword`,
+      data: {
+        email,
+        password,
+        otp
+      },
+      responseType: 'json'
+    });
+    if (result.data.code == 200) return res.redirect('/auth/signin?email=' + email);
+    return res.redirect('/auth/newpassword?email=' + email);
   }
 }

@@ -34,4 +34,22 @@ router.post('/resendotp', function(req, res, next) {
   authController.reSendOTP(req, res);
 });
 
+// Forgot password
+router.get('/forgotpassword', function(req, res, next) {
+  return res.render('auth/forgotpass', { title: 'Quên mật khẩu' });
+});
+
+router.post('/forgotpassword', function(req, res, next) {
+  authController.forgotPassword(req, res);
+});
+
+// New password
+router.get('/newpassword', function(req, res, next) {
+  return res.render('auth/newpass', { title: 'Tạo mật khẩu mới' });
+});
+
+router.post('/newpassword', function(req, res, next) {
+  authController.newPassword(req, res);
+});
+
 module.exports = router;
