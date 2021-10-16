@@ -29,4 +29,9 @@ router.post('/verify', function(req, res, next) {
   authController.verifyOTP(req, res);
 });
 
+// ReSendOTP
+router.post('/resendotp', function(req, res, next) {
+  authController.reSendOTP(req, res);
+});
+
 module.exports = router;

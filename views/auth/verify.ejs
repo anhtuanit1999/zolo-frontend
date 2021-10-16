@@ -47,11 +47,14 @@
             <input id="txtOTP" name="otp" class="form-control" placeholder="OTP" title="OTP" required>
           </div>
           <!-- form-group// email-->
-          <input name="email" hidden="true" class="form-control" value="<%= query.email %>" required>
+          <input id="txtEmail" name="email" hidden="true" class="form-control" value="<%= query.email %>" required>
           <!-- form-group// submit-->
           <div class="form-group">
             <button id="btnXacThuc" type="submit" class="btn btn-primary btn-block"> Xác thực  </button>
           </div>
+          <!-- form-group// submit-->
+
+          <p class="text-center"><a id="reSendOTP" href="javascript:void(0)">Gửi lại mã OTP</a> </p>
           <!-- form-group// -->
           <p class="text-center">Chưa có tài khoản? <a href="/auth/signup">Đăng ký</a> </p>
         </form>
@@ -72,9 +75,28 @@
       alert('OTP không hợp lệ');
       return false;
     }
+    const reSendOTP = () => {
+      if (!$('#txtEmail').val()) {
+        alert('Email không hợp lệ');
+        return;
+      }
+      $.ajax({
+        type: 'POST',
+        url: '/auth/resendotp',
+        data: {
+          email: $('#txtEmail').val()
+        },
+        success: function(result, err, xhr) {
+          if (xhr.responseJSON.code == 200) {
+            alert(xhr.responseJSON.message);
+          }
+        }
+      });
+    }
 
     $(document).ready(() => {
       $('#txtOTP').blur(checkOTP);
+      $('#reSendOTP').click(reSendOTP);
       $('#txtOTP').keydown((e) => {
         const key = e.which;
         if (key == 13) $('#btnXacThuc').click();

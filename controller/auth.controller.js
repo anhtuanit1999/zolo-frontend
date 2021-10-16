@@ -60,5 +60,17 @@ module.exports = {
     });
     if (result.data.code == 200) return res.redirect('/auth/signin?email=' + email);
     return res.redirect('/auth/verify?email=' + email);
+  },
+  reSendOTP: async(req, res) => {
+    const { email } = req.body;
+    const result = await axios({
+      method: 'POST',
+      url: `${DOMAIN}/auth/resendotp`,
+      data: {
+        email
+      },
+      responseType: 'json'
+    });
+    return res.send({...result.data });
   }
 }
