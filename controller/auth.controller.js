@@ -35,15 +35,13 @@ module.exports = {
       responseType: 'json'
     });
     if (result.data.code == 200) {
-      const data = {
-        code: result.data.code,
-        jwt: result.data.data.jwt
-      }
-      return res.send(data);
+      res.cookie('jwt', result.data.data.jwt);
+      return res.redirect('/')
     }
     if (result.data.code == 400 && result.data.message == 'Người dùng chưa kích hoạt tài khoản')
       return res.redirect('/auth/verify?email=' + email);
-    return res.redirect('/auth/signin');
+
+    return res.redirect('/auth/signin?email=' + email);
   },
   verifyOTP: async(req, res) => {
     const { email, otp } = req.body;

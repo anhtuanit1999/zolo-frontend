@@ -52,7 +52,7 @@
           </div>
           <!-- form-group// submit-->
           <div class="form-group">
-            <button id="btnDangNhap" type="button" class="btn btn-primary btn-block"> Đăng nhập  </button>
+            <button id="btnDangNhap" type="submit" class="btn btn-primary btn-block"> Đăng nhập  </button>
           </div>
           <!-- form-group// -->
           <p class="text-center">Chưa có tài khoản? <a href="/auth/signup">Đăng ký</a> </p>
@@ -85,29 +85,28 @@
       return false;
     }
 
-    const signIn = () => {
-      if (!checkEmail() || !checkPassword) return;
-      $.ajax({
-        type: 'POST',
-        url: '/auth/signin',
-        data: {
-          email: $('#txtEmail').val(),
-          password: $('#txtPassword').val()
-        },
-        success: function(result, err, xhr) {
-          console.log('data ' + result.data, err, xhr);
-          if (xhr.responseJSON.code == 200) {
-            window.localStorage.setItem('accessToken', 'Bearer ' + xhr.responseJSON.jwt);
-            window.location.replace('/');
-          }
-        }
-      })
-    }
+    // const signIn = () => {
+    //   if (!checkEmail() || !checkPassword) return;
+    //   $.ajax({
+    //     type: 'POST',
+    //     url: '/auth/signin',
+    //     data: {
+    //       email: $('#txtEmail').val(),
+    //       password: $('#txtPassword').val()
+    //     },
+    //     success: function(result, err, xhr) {
+    //       console.log('data ' + result.data, err, xhr);
+    //       if (xhr.responseJSON.code == 200) {
+    //         window.localStorage.setItem('accessToken', 'Bearer ' + xhr.responseJSON.jwt);
+    //         window.location.replace('/');
+    //       }
+    //     }
+    //   })
+    // }
 
     $(document).ready(() => {
       $('#txtEmail').blur(checkEmail);
       $('#txtPassword').blur(checkPassword);
-      $('#btnDangNhap').click(signIn);
       $('#txtPassword').keydown((e) => {
         const key = e.which;
         if (key == 13) $('#btnDangNhap').click();
