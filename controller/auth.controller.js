@@ -18,7 +18,7 @@ module.exports = {
         idRole: 1
       },
       responseType: 'json'
-    });
+    })
     if (result.data.code == 200) return res.redirect('/auth/verify?email=' + email);
     return res.redirect('/auth/signup');
   },
@@ -33,7 +33,7 @@ module.exports = {
         password
       },
       responseType: 'json'
-    });
+    }).catch(err => console.log(err));;
     if (result.data.code == 200) {
       res.cookie('jwt', result.data.data.jwt);
       return res.redirect('/')
@@ -54,7 +54,7 @@ module.exports = {
         otp
       },
       responseType: 'json'
-    });
+    }).catch(err => console.log(err));;
     if (result.data.code == 200) return res.redirect('/auth/signin?email=' + email);
     return res.redirect('/auth/verify?email=' + email);
   },
@@ -68,7 +68,7 @@ module.exports = {
         email
       },
       responseType: 'json'
-    });
+    }).catch(err => console.log(err));;
     return res.send({...result.data });
   },
   forgotPassword: async(req, res) => {
@@ -81,7 +81,7 @@ module.exports = {
         email
       },
       responseType: 'json'
-    });
+    }).catch(err => console.log(err));;
     if (result.data.code == 200) return res.redirect('/auth/newpassword?email=' + email);
     return res.redirect('/auth/forgotpassword?email=' + email);
   },
@@ -97,7 +97,7 @@ module.exports = {
         otp
       },
       responseType: 'json'
-    });
+    }).catch(err => console.log(err));;
     if (result.data.code == 200) return res.redirect('/auth/signin?email=' + email);
     return res.redirect('/auth/newpassword?email=' + email);
   }
