@@ -491,7 +491,7 @@
             </div>
           </div>
           <div class="col-sm-8 col-xs-7 heading-name">
-            <a class="heading-name-meta">John Doe
+            <a class="heading-name-meta">Home
           </a>
             <span class="heading-online">Online</span>
           </div>
@@ -501,7 +501,7 @@
         </div>
 
         <div class="row message" id="conversation">
-          <span id="chatgroupid" hidden="true">50</span>
+          <span id="chatgroupid" hidden="true">0</span>
           <div class="row message-previous">
             <div class="col-sm-12 previous">
               <a onclick="previous(this)" id="ankitjain28" name="20">
@@ -510,31 +510,7 @@
             </div>
           </div>
           <!-- chat -->
-          <div class="row message-body">
-            <div class="col-sm-12 message-main-receiver">
-              <div class="receiver">
-                <div class="message-text">
-                  Hi, what are you doing?!
-                </div>
-                <!-- <span class="message-time pull-right">
-                Sun
-              </span> -->
-              </div>
-            </div>
-          </div>
 
-          <div class="row message-body">
-            <div class="col-sm-12 message-main-sender">
-              <div class="sender">
-                <div class="message-text">
-                  I am doing nothing man! I am doing nothing man! I am doing nothing man! I am doing nothing man! I am doing nothing man!
-                </div>
-                <!-- <span class="message-time pull-right">
-                Sun
-              </span> -->
-              </div>
-            </div>
-          </div>
         </div>
         <!-- Box trả lời -->
         <div class="row reply">
@@ -545,7 +521,7 @@
             <textarea class="form-control" rows="1" id="comment"></textarea>
           </div>
           <div class="col-sm-1 col-xs-1 reply-recording">
-            <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
+            <i id="btnMicro" class="fa fa-microphone fa-2x" aria-hidden="true"></i>
           </div>
           <div id="btnSend" class="col-sm-1 col-xs-1 reply-send">
             <i class="fa fa-send fa-2x" aria-hidden="true"></i>
@@ -556,8 +532,10 @@
   </div>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
   <script>
+    const scrollToBottom = () => {
+      $('#conversation').scrollTop($('#conversation').prop('scrollHeight'));
+    };
     const showGroup = () => {
-      console.log($('.row.sideBar-body .chatgroupidindex').text());
       // group name
       $('.conversation .heading-name .heading-name-meta')
         .text($('.row.sideBar-body .chatgroupnameindex').text());
@@ -582,22 +560,47 @@
         },
         success: function(result, err, xhr) {
           for (let i = xhr.responseJSON.length - 1; i >= 0; i--) {
-            appendMess(xhr.responseJSON[i].content, xhr.responseJSON[i].type);
+            appendMess(
+              xhr.responseJSON[i].content,
+              xhr.responseJSON[i].type,
+              new Date(xhr.responseJSON[i].createAt),
+              xhr.responseJSON[i].user);
           }
+          scrollToBottom();
         }
       })
     }
-    const appendMess = (mess, type) => {
-      const conversation = $('#conversation').append(
-        `<div class="row message-body">
+    const appendMess = (mess, type, time, header) => {
+      if (!header) {
+        const conversation = $('#conversation').append(
+          `<div class="row message-body">
             <div class="col-sm-12 message-main-${type}">
               <div class="${type}">
                 <div class="message-text">
                   ${mess}
                 </div>
-                <!-- <span class="message-time pull-right">
-                Sun
-              </span> -->
+                <div class="message-text sender-or-receiver">
+                  ${time.getHours()}:${time.getMinutes()}
+                </div>
+              </div>
+            </div>
+          </div>`
+        );
+        return;
+      }
+      const conversation = $('#conversation').append(
+        `<div class="row message-body">
+            <div class="col-sm-12 message-main-${type}">
+              <div class="${type}">
+                <div class="message-text sender-or-receiver">
+                  ${type == 'receiver' ? header : ''}
+                </div>
+                <div class="message-text">
+                  ${mess}
+                </div>
+                <div class="message-text sender-or-receiver">
+                  ${time.getHours()}:${time.getMinutes()}
+                </div>
               </div>
             </div>
           </div>`
@@ -626,9 +629,10 @@
           mess
         };
         saveMessage(data);
-        appendMess(mess, 'sender');
+        appendMess(mess, 'sender', new Date());
         const msg = JSON.stringify(data);
         socket.emit('chat message', msg);
+        scrollToBottom();
       }
       $('#comment').val('');
       $('#comment').focus();
@@ -642,12 +646,16 @@
         const message = JSON.parse(msg);
         if ($('#chatgroupid').text() == message.chatgroupId) {
           if ($('#userid').text() != message.userId) {
-            appendMess(message.mess, 'receiver');
+            appendMess(message.mess, 'receiver', new Date());
+            scrollToBottom();
           }
         }
       });
       $('#btnSend').click(() => {
         sendMess(socket);
+      });
+      $('#btnMicro').click(() => {
+        scrollToBottom();
       });
       $('#comment').keydown((e) => {
         const key = e.which;

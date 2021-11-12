@@ -380,6 +380,13 @@ body {
   color: #9a9a9a;
 }
 
+.sender-or-receiver {
+  word-wrap: break-word;
+  font-weight: 200;
+  font-size: 14px;
+  color: #9a9a9a;
+}
+
 .receiver {
   width: auto !important;
   padding: 4px 10px 7px !important;
