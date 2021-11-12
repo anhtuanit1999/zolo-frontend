@@ -1,6 +1,5 @@
 exports.anthentication = (req, res, next) => {
   const jwt = getCookies(req)['jwt'];
-  console.log(jwt);
   if (!jwt) {
     return res.redirect('/auth/signin');
   } else next();
@@ -16,3 +15,4 @@ const getCookies = function(request) {
   } else cookies['jwt'] = '';
   return cookies;
 };
+exports.getCookies = getCookies;

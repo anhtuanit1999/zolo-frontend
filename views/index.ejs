@@ -22,6 +22,7 @@
         <div class="side-one">
           <div class="row heading">
             <div class="col-sm-3 col-xs-3 heading-avatar">
+              <span id="userid" hidden="true"><%= user.id %></span>
               <div class="heading-avatar-icon">
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
               </div>
@@ -42,29 +43,34 @@
               </div>
             </div>
           </div>
-
+          <!-- Groups -->
           <div class="row sideBar">
-            <div class="row sideBar-body">
-              <div class="col-sm-3 col-xs-3 sideBar-avatar">
-                <div class="avatar-icon">
-                  <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
-                </div>
+            <% if(groupsLen == 0) { %>
+              <div class="row sideBar-body">
+                Không tìm thấy nhóm chat nào
               </div>
-              <div class="col-sm-9 col-xs-9 sideBar-main">
-                <div class="row">
-                  <div class="col-sm-8 col-xs-8 sideBar-name">
-                    <span class="name-meta">John Doe
-                </span>
+              <% } else { %>
+                <% for(let i = 0; i < groupsLen; i++) { %>
+                  <div class="row sideBar-body">
+                    <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                      <div class="avatar-icon">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                      </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-9 sideBar-main">
+                      <div class="row">
+                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                          <span hidden="true" class="chatgroupidindex"><%= groups[i].id %></span>
+                          <span class="name-meta chatgroupnameindex"><%= groups[i].name %></span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span class="time-meta pull-right">18:18
-                </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  <% } %>
+                    <% } %>
 
-            <div class="row sideBar-body">
+
+                      <!-- <div class="row sideBar-body"> 
               <div class="col-sm-3 col-xs-3 sideBar-avatar">
                 <div class="avatar-icon">
                   <img src="https://bootdey.com/img/Content/avatar/avatar2.png">
@@ -234,7 +240,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
 
@@ -258,9 +264,31 @@
               </div>
             </div>
           </div>
-
+          <!-- Friends -->
           <div class="row compose-sideBar">
-            <div class="row sideBar-body">
+            <% if(friendsLen == 0) { %>
+              <div class="row sideBar-body">
+                Không tìm thấy ai
+              </div>
+              <% } else { %>
+                <% for(let i = 0; i < friendsLen; i++) { %>
+                  <div class="row sideBar-body">
+                    <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                      <div class="avatar-icon">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                      </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-9 sideBar-main">
+                      <div class="row">
+                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                          <span class="name-meta"><%= friends[i].fullName%></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <% } %>
+                    <% } %>
+                      <!-- <div class="row sideBar-body"> 
               <div class="col-sm-3 col-xs-3 sideBar-avatar">
                 <div class="avatar-icon">
                   <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
@@ -450,11 +478,11 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
-
+      <!-- Box Chat -->
       <div class="col-sm-8 conversation">
         <div class="row heading">
           <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
@@ -473,6 +501,7 @@
         </div>
 
         <div class="row message" id="conversation">
+          <span id="chatgroupid" hidden="true">50</span>
           <div class="row message-previous">
             <div class="col-sm-12 previous">
               <a onclick="previous(this)" id="ankitjain28" name="20">
@@ -480,16 +509,16 @@
             </a>
             </div>
           </div>
-
+          <!-- chat -->
           <div class="row message-body">
             <div class="col-sm-12 message-main-receiver">
               <div class="receiver">
                 <div class="message-text">
                   Hi, what are you doing?!
                 </div>
-                <span class="message-time pull-right">
+                <!-- <span class="message-time pull-right">
                 Sun
-              </span>
+              </span> -->
               </div>
             </div>
           </div>
@@ -498,16 +527,16 @@
             <div class="col-sm-12 message-main-sender">
               <div class="sender">
                 <div class="message-text">
-                  I am doing nothing man!
+                  I am doing nothing man! I am doing nothing man! I am doing nothing man! I am doing nothing man! I am doing nothing man!
                 </div>
-                <span class="message-time pull-right">
+                <!-- <span class="message-time pull-right">
                 Sun
-              </span>
+              </span> -->
               </div>
             </div>
           </div>
         </div>
-
+        <!-- Box trả lời -->
         <div class="row reply">
           <div class="col-sm-1 col-xs-1 reply-emojis">
             <i class="fa fa-smile-o fa-2x"></i>
@@ -518,13 +547,115 @@
           <div class="col-sm-1 col-xs-1 reply-recording">
             <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
           </div>
-          <div class="col-sm-1 col-xs-1 reply-send">
+          <div id="btnSend" class="col-sm-1 col-xs-1 reply-send">
             <i class="fa fa-send fa-2x" aria-hidden="true"></i>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script>
+    const showGroup = () => {
+      console.log($('.row.sideBar-body .chatgroupidindex').text());
+      // group name
+      $('.conversation .heading-name .heading-name-meta')
+        .text($('.row.sideBar-body .chatgroupnameindex').text());
+      // group body
+      $('#conversation').empty().append(`
+        <span id="chatgroupid" hidden="true">${$('.row.sideBar-body .chatgroupidindex').text()}</span>
+        <div class="row message-previous">
+            <div class="col-sm-12 previous">
+              <a onclick="previous(this)" id="ankitjain28" name="20">
+            Show Previous Message!
+            </a>
+            </div>
+          </div>
+      `);
+      $.ajax({
+        type: 'POST',
+        url: '/message/getall',
+        data: {
+          chatgroupId: +$('.row.sideBar-body .chatgroupidindex').text(),
+          limit: 50,
+          lastId: 0
+        },
+        success: function(result, err, xhr) {
+          for (let i = xhr.responseJSON.length - 1; i >= 0; i--) {
+            appendMess(xhr.responseJSON[i].content, xhr.responseJSON[i].type);
+          }
+        }
+      })
+    }
+    const appendMess = (mess, type) => {
+      const conversation = $('#conversation').append(
+        `<div class="row message-body">
+            <div class="col-sm-12 message-main-${type}">
+              <div class="${type}">
+                <div class="message-text">
+                  ${mess}
+                </div>
+                <!-- <span class="message-time pull-right">
+                Sun
+              </span> -->
+              </div>
+            </div>
+          </div>`
+      );
+    };
+    const saveMessage = (data) => {
+      $.ajax({
+        type: 'POST',
+        url: '/message/create',
+        data: {
+          chatgroupId: data.chatgroupId,
+          userId: data.userId,
+          content: data.mess
+        },
+        success: function(result, err, xhr) {
+          if (!err) console.log('save done!');
+        }
+      })
+    }
+    const sendMess = (socket) => {
+      const mess = $('#comment').val();
+      if (mess.trim() !== '') {
+        const data = {
+          chatgroupId: +$('#chatgroupid').text(),
+          userId: +$('#userid').text(),
+          mess
+        };
+        saveMessage(data);
+        appendMess(mess, 'sender');
+        const msg = JSON.stringify(data);
+        socket.emit('chat message', msg);
+      }
+      $('#comment').val('');
+      $('#comment').focus();
+    }
+    $(function() {
+      const domain = config["<%= process.env.NODE_ENV %>" || "local"].domain;
+      var socket = io(domain, {
+        withCredentials: true
+      });
+      socket.on('chat message', (msg) => {
+        const message = JSON.parse(msg);
+        if ($('#chatgroupid').text() == message.chatgroupId) {
+          if ($('#userid').text() != message.userId) {
+            appendMess(message.mess, 'receiver');
+          }
+        }
+      });
+      $('#btnSend').click(() => {
+        sendMess(socket);
+      });
+      $('#comment').keydown((e) => {
+        const key = e.which;
+        if (key == 13) $('#btnSend').click();
+      });
+      $('.row.sideBar-body').click(showGroup);
+    });
+  </script>
 </body>
 
 </html>
