@@ -25,21 +25,25 @@ module.exports = {
   signIn: async(req, res) => {
     const { email, password } = req.body;
     // Gửi tới API
-    const result = await axios({
-      method: 'POST',
-      url: `${DOMAIN}/auth/signin`,
-      data: {
-        email,
-        password
-      },
-      responseType: 'json'
-    }).catch(err => console.log(err));;
-    if (result.data.code == 200) {
-      res.cookie('jwt', result.data.data.jwt);
-      return res.redirect('/')
+    try {
+      const result = await axios({
+        method: 'POST',
+        url: `${DOMAIN}/auth/signin`,
+        data: {
+          email,
+          password
+        },
+        responseType: 'json'
+      });
+      if (result.data.code == 200) {
+        res.cookie('jwt', result.data.data.jwt);
+        return res.redirect('/')
+      }
+      if (result.data.code == 400 && result.data.message == 'Người dùng chưa kích hoạt tài khoản')
+        return res.redirect('/auth/verify?email=' + email);
+    } catch (error) {
+      console.log(error);
     }
-    if (result.data.code == 400 && result.data.message == 'Người dùng chưa kích hoạt tài khoản')
-      return res.redirect('/auth/verify?email=' + email);
 
     return res.redirect('/auth/signin?email=' + email);
   },
