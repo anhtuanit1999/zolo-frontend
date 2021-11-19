@@ -301,6 +301,8 @@
       );
     };
     const appendMess = (mess, type, time, header) => {
+      const hour = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+      const minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
       if (!header) {
         const conversation = $('#conversation').append(
           `<div class="row message-body">
@@ -310,7 +312,7 @@
                   ${mess}
                 </div>
                 <div class="message-text sender-or-receiver">
-                  ${time.getHours()}:${time.getMinutes()}
+                  ${hour}:${minutes}
                 </div>
               </div>
             </div>
@@ -329,7 +331,7 @@
                   ${mess}
                 </div>
                 <div class="message-text sender-or-receiver">
-                  ${time.getHours()}:${time.getMinutes()}
+                  ${hour}:${minutes}
                 </div>
               </div>
             </div>
