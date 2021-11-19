@@ -48,7 +48,7 @@ module.exports = {
           Authorization: 'Bearer ' + token
         }
       });
-      console.log(messages.data);
+      // console.log(messages.data);
     } catch (e) {
       console.log(e.response.data);
       if (e.response.data !== 404) return res.redirect('/auth/signin');
