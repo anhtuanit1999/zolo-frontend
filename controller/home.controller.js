@@ -6,9 +6,9 @@ module.exports = {
     // Lấy jwt
     const token = getCookies(req)['jwt'];
     // Gửi tới API
-    let friends, groups, user;
+    let friends, groups, user, friendWait, friendBan;
     try {
-      [friends, groups, user] = await Promise.all([
+      [friends, groups, user, friendWait, friendBan] = await Promise.all([
         axios({
           method: 'POST',
           url: `${DOMAIN}/friend/getall`,
@@ -40,6 +40,30 @@ module.exports = {
           headers: {
             Authorization: 'Bearer ' + token
           }
+        }),
+        axios({
+          method: 'POST',
+          url: `${DOMAIN}/friend/getinvite`,
+          data: {
+            limit: 10,
+            lastId: 0
+          },
+          responseType: 'json',
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }),
+        axios({
+          method: 'POST',
+          url: `${DOMAIN}/friend/getBan`,
+          data: {
+            limit: 10,
+            lastId: 0
+          },
+          responseType: 'json',
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
         })
       ]);
     } catch (e) {
@@ -53,7 +77,39 @@ module.exports = {
       friendsLen: friends.data.data.length,
       groups: groups.data.data,
       groupsLen: groups.data.data.length,
-      user: user.data.data
+      user: user.data.data,
+      friendWaitLen: friendWait.data.data.length,
+      friendWaits: friendWait.data.data,
+      friendBanLen: friendBan.data.data.length,
+      friendBans: friendBan.data.data
+    });
+  },
+  getCreateGroup: async(req, res) => {
+    // Lấy jwt
+    const token = getCookies(req)['jwt'];
+    // Gửi tới API
+    let friend;
+    try {
+      friend = await axios({
+        method: 'POST',
+        url: `${DOMAIN}/friend/getall`,
+        data: {
+          limit: 10,
+          lastId: 0
+        },
+        responseType: 'json',
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      })
+    } catch (e) {
+      console.log(e.response);
+      return res.redirect('/creategroup');
+    }
+    return res.render('creategroup', {
+      title: 'Tạo nhóm chat',
+      friends: friend.data.data,
+      friendsLen: friend.data.data.length
     });
   }
 }

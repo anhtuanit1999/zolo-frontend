@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!------ Include the above in your HEAD tag ---------->
+  <link rel='stylesheet' href='/stylesheets/signup.css' />
+  <title>
+    <%=title%>
+  </title>
+</head>
+
+<body>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+
+  <div class="container">
+    <br>
+    <p class="text-center">Chat app zolo <a href="/"> trang chủ</a></p>
+    <hr>
+    <div class="card bg-light">
+      <article class="card-body mx-auto" style="max-width: 400px;">
+        <h4 class="card-title mt-3 text-center">Tạo nhóm chat</h4>
+        <p class="divider-text">
+          <span class="bg-light">~</span>
+        </p>
+        <form action="/group/create" method="post" enctype="application/x-www-form-urlencoded">
+          <!-- form-group// OTP-->
+          <div class="form-group input-group">
+            <input id="txtTenNhom" name="name" class="form-control" placeholder="Tên nhóm" title="Tên nhóm">
+          </div>
+          <!-- form-group userId// -->
+          <div class="form-group input-group">
+            <label for="sel1">Chọn bạn bè:</label>
+          </div>
+          <!-- form-group userId// -->
+          <div class="form-group input-group">
+            <select class="selectpicker form-control" name="listFriendSelected" multiple>
+              <% if(friendsLen > 0) { %>
+                <% for(let i = 0; i < friendsLen; i++) { %>
+                  <option value="<%=friends[i].id%>"><%=friends[i].fullName%> - <%=friends[i].email%></option>
+                  <% } %>
+                <% } %>
+            </select>
+          </div>
+          <!-- form-group// submit-->
+          <div class="form-group">
+            <button id="btnTaoNhom" type="button" class="btn btn-primary btn-block"> Tạo nhóm chat </button>
+          </div>
+        </form>
+      </article>
+    </div>
+    <!-- card.// -->
+
+  </div>
+  <!--container end.//-->
+
+  <br><br>
+  <script>
+    $(document).ready(() => {
+      $('#btnTaoNhom').click(() => {
+        if ($("select option:selected").length < 2) {
+          alert('Chọn ít nhất 2 người bạn để tạo nhóm');
+          return;
+        }
+        $("form").submit();
+      });
+      $('#txtTenNhom').keydown((e) => {
+        const key = e.which;
+        if (key == 13) $('#btnTaoNhom').click();
+      });
+    });
+  </script>
+</body>
+
+</html>

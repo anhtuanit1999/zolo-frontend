@@ -27,42 +27,54 @@
               <span id="userid" hidden="true"><%= user.id %></span>
               <span id="groupid" hidden="true"></span>
               <span id="messlastid" hidden="true"></span>
+              <span id="grouplastid" hidden="true"></span>
               <div class="heading-avatar-icon">
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
               </div>
             </div>
+
             <div class="col-sm-1 col-xs-1  heading-dot  pull-right">
               <i onclick="myFunction()" class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
             </div>
-            <div class="col-sm-2 col-xs-2 heading-compose  pull-right">
+            <div class="col-sm-2 col-xs-2 heading-compose pull-right">
               <i class="fa fa-comments fa-2x  pull-right" aria-hidden="true"></i>
+            </div>
+            <div id="btnFindUser" title="Thêm bạn" class="col-sm-1 col-xs-1 heading-compose1 pull-right">
+              <i class="fa fa-plus fa-2x  pull-right" aria-hidden="true"></i>
             </div>
           </div>
 
           <!-- Top Navigation Menu -->
           <div id="myLinks" class="row searchBox" style="display: none;">
             <div class="col-sm-12 searchBox-inner previous">
-              <a class="row searchBox" href="#">Tạo nhóm</a>
-              <a class="row searchBox" href="#">Danh sách bạn chờ</a>
-              <a class="row searchBox" href="#">Danh sách đen</a>
+              <a class="row searchBox" href="/creategroup">Tạo nhóm</a>
+              <a id="btnDSBanCho" class="row searchBox" href="#">Danh sách bạn chờ</a>
+              <a id="btnDSDen" class="row searchBox" href="#">Danh sách đen</a>
             </div>
           </div>
 
           <div class="row searchBox">
             <div class="col-sm-12 searchBox-inner">
               <div class="form-group has-feedback">
-                <input id="searchText" type="text" class="form-control" name="searchText" placeholder="Search">
+                <input id="txtSearch" type="text" class="form-control" name="searchText" placeholder="Tìm nhóm chat">
                 <!-- <span class="glyphicon glyphicon-search form-control-feedback"></span> -->
               </div>
             </div>
           </div>
           <!-- Groups -->
-          <div class="row sideBar">
+          <div class="row sideBar groupadd">
             <% if(groupsLen == 0) { %>
               <div class="row sideBar-body">
                 Không tìm thấy nhóm chat nào
               </div>
               <% } else { %>
+                <div id="messPrevious" class="row message-previous">
+                  <div class="col-sm-12 previous">
+                    <a href="javascript:void(0)" id="btnShowMoreGroup" name="20">
+                  Tải thêm nhóm chat
+                  </a>
+                  </div>
+                </div>
                 <% for(let i = 0; i < groupsLen; i++) { %>
                   <div class="row sideBar-body">
                     <div class="col-sm-3 col-xs-3 sideBar-avatar">
@@ -83,7 +95,7 @@
                     <% } %>
           </div>
         </div>
-
+        <!-- Danh sách bạn bè -->
         <div class="side-two">
           <div class="row newMessage-heading">
             <div class="row newMessage-main">
@@ -99,7 +111,7 @@
           <div class="row composeBox">
             <div class="col-sm-12 composeBox-inner">
               <div class="form-group has-feedback">
-                <input id="composeText" type="text" class="form-control" name="searchText" placeholder="Search People">
+                <input id="composeText" type="text" class="form-control" name="searchText" placeholder="Tìm bạn bè">
                 <!-- <span class="glyphicon glyphicon-search form-control-feedback"></span> -->
               </div>
             </div>
@@ -121,7 +133,11 @@
                     <div class="col-sm-9 col-xs-9 sideBar-main">
                       <div class="row">
                         <div class="col-sm-8 col-xs-8 sideBar-name">
-                          <span class="name-meta"><%= friends[i].fullName%></span>
+                          <span hidden="true" class="name-meta id"><%= friends[i].id%></span>
+                          <span class="name-meta chatgroupnameindex"><%= friends[i].fullName%></span>
+                          <br>
+                          <button class="btn btn-secondary btnBan">Chặn</button>
+                          <button class="btn btn-danger btnUnFriend">Hủy</button>
                         </div>
                       </div>
                     </div>
@@ -130,7 +146,136 @@
                     <% } %>
           </div>
         </div>
+        <!-- Danh sách chờ -->
+
+        <div class="side-three">
+          <div class="row newMessage-heading1">
+            <div class="row newMessage-main">
+              <div class="col-sm-2 col-xs-2 newMessage-back1">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+              </div>
+              <div class="col-sm-10 col-xs-10 newMessage-title">
+                Danh sách bạn chờ
+              </div>
+            </div>
+          </div>
+
+          <div class="row composeBox">
+            <div class="col-sm-12 composeBox-inner">
+              <div class="form-group has-feedback">
+                <input id="composeText" type="text" class="form-control" name="searchText" placeholder="Tìm bạn đang gửi lời mời">
+                <!-- <span class="glyphicon glyphicon-search form-control-feedback"></span> -->
+              </div>
+            </div>
+          </div>
+          <!-- Friends -->
+          <div class="row compose-sideBar">
+            <% if(friendWaitLen == 0) { %>
+              <div class="friend row sideBar-body">
+                Không có bạn mới
+              </div>
+              <% } else { %>
+                <% for(let i = 0; i < friendWaitLen; i++) { %>
+                  <div class="friend row sideBar-body">
+                    <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                      <div class="avatar-icon">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                      </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-9 sideBar-main">
+                      <div class="row">
+                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                          <span hidden="true" class="name-meta id"><%= friendWaits[i].id%></span>
+                          <span class="name-meta"><%= friendWaits[i].fullName%></span>
+                          <br>
+                          <button class="btn btn-success btnAccept">Okay</button>
+                          <button class="btn btn-danger btnCancel">Hủy</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <% } %>
+                    <% } %>
+          </div>
+        </div>
+        <!-- Danh sách đen -->
+        <div class="side-four">
+          <div class="row newMessage-heading2">
+            <div class="row newMessage-main">
+              <div class="col-sm-2 col-xs-2 newMessage-back2">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+              </div>
+              <div class="col-sm-10 col-xs-10 newMessage-title">
+                Danh sách đen
+              </div>
+            </div>
+          </div>
+
+          <div class="row composeBox">
+            <div class="col-sm-12 composeBox-inner">
+              <div class="form-group has-feedback">
+                <input id="composeText" type="text" class="form-control" name="searchText" placeholder="Tìm bạn bị chặn">
+                <!-- <span class="glyphicon glyphicon-search form-control-feedback"></span> -->
+              </div>
+            </div>
+          </div>
+          <!-- Friends -->
+          <div class="row compose-sideBar">
+            <% if(friendBanLen == 0) { %>
+              <div class="friend row sideBar-body">
+                Không có bạn bị chặn
+              </div>
+              <% } else { %>
+                <% for(let i = 0; i < friendBanLen; i++) { %>
+                  <div class="friend row sideBar-body">
+                    <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                      <div class="avatar-icon">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                      </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-9 sideBar-main">
+                      <div class="row">
+                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                          <span hidden="true" class="name-meta id"><%= friendBans[i].id%></span>
+                          <span class="name-meta"><%= friendBans[i].fullName%></span>
+                          <br>
+                          <button class="btn btn-primary btnChan">Bỏ chặn</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <% } %>
+                    <% } %>
+          </div>
+        </div>
+        <!-- Tìm người lạ hoặc bạn -->
+        <div class="side-five">
+          <div class="row newMessage-heading3">
+            <div class="row newMessage-main">
+              <div class="col-sm-2 col-xs-2 newMessage-back3">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+              </div>
+              <div class="col-sm-10 col-xs-10 newMessage-title">
+                Danh sách tìm kiếm
+              </div>
+            </div>
+          </div>
+
+          <div class="row composeBox">
+            <div class="col-sm-12 composeBox-inner">
+              <div class="form-group has-feedback">
+                <input id="txtFindUser" type="text" class="form-control" name="searchText" placeholder="Tìm bạn">
+                <!-- <span class="glyphicon glyphicon-search form-control-feedback"></span> -->
+              </div>
+            </div>
+          </div>
+          <!-- Friends -->
+          <div class="row compose-sideBar findUser">
+
+          </div>
+        </div>
       </div>
+
       <!-- Box Chat -->
       <div class="col-sm-8 conversation">
         <div class="row heading">
@@ -146,6 +291,9 @@
           </div>
           <div class="col-sm-1 col-xs-1  heading-dot pull-right">
             <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+          </div>
+          <div id="btnSignOut" title="Đăng xuất" class="col-sm-1 col-xs-1  heading-dot pull-right">
+            <i class="fa fa-sign-out fa-2x  pull-right" aria-hidden="true"></i>
           </div>
         </div>
 
@@ -181,6 +329,150 @@
   </div>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
   <script>
+    const unFriend = (id) => {
+      $.ajax({
+        type: 'POST',
+        url: '/friend/unfriend',
+        data: {
+          idFriend: +id
+        },
+        success: function(result, err, xhr) {
+          alert(xhr.responseJSON.message);
+        }
+      })
+    };
+    const inviteFriend = (id) => {
+      $.ajax({
+        type: 'POST',
+        url: '/friend/invite',
+        data: {
+          idFriend: +id
+        },
+        success: function(result, err, xhr) {
+          alert(xhr.responseJSON.message);
+        }
+      })
+    };
+    const findUser = (keyWord) => {
+      $.ajax({
+        type: 'POST',
+        url: '/friend/finduser',
+        data: {
+          keyWord
+        },
+        success: function(result, err, xhr) {
+          if (xhr.responseJSON.userLen == 0) {
+            const conversation = $('.findUser').empty().prepend(`
+            <div class="friend row sideBar-body">
+                Không có kết quả
+              </div>
+            `);
+          } else {
+            $('.findUser').empty();
+            for (let i = 0; i < xhr.responseJSON.userLen; i++) {
+              const conversation = $('.findUser').prepend(`
+                  <div class="friend row sideBar-body">
+                    <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                      <div class="avatar-icon">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                      </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-9 sideBar-main">
+                      <div class="row">
+                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                          <span hidden="true" class="name-meta id">${xhr.responseJSON.users[i].id}</span>
+                          <span class="name-meta">${xhr.responseJSON.users[i].name}</span>
+                          <br>
+                          ${!xhr.responseJSON.users[i].isFriend ? '<button class="btn btn-success btnInvite">Kết bạn</button>' : ''}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              `)
+            }
+          }
+        }
+      })
+    };
+    const showMoreGroup = (id) => {
+      $.ajax({
+        type: 'POST',
+        url: '/group/getall',
+        data: {
+          lastId: +id
+        },
+        success: function(result, err, xhr) {
+          if (xhr.responseJSON.length > 0)
+            for (let i = 0; i < xhr.responseJSON.length; i++) {
+              const conversation = $('.groupadd').prepend(`
+                  <div class="row sideBar-body">
+                    <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                      <div class="avatar-icon">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                      </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-9 sideBar-main">
+                      <div class="row">
+                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                          <span hidden="true" class="chatgroupidindex">${xhr.responseJSON[i].id}</span>
+                          <span class="name-meta chatgroupnameindex">${xhr.responseJSON[i].name}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              `)
+            }
+        }
+      })
+    };
+    const banFriend = (id) => {
+      $.ajax({
+        type: 'POST',
+        url: '/friend/ban',
+        data: {
+          idFriend: +id
+        },
+        success: function(result, err, xhr) {
+          alert(xhr.responseJSON.message);
+        }
+      })
+    };
+    const denyAcceptFriend = (id) => {
+      $.ajax({
+        type: 'POST',
+        url: '/friend/deny',
+        data: {
+          idFriend: +id
+        },
+        success: function(result, err, xhr) {
+          alert(xhr.responseJSON.message);
+        }
+      })
+    };
+    const acceptFriend = (id) => {
+      $.ajax({
+        type: 'POST',
+        url: '/friend/add',
+        data: {
+          idFriend: +id
+        },
+        success: function(result, err, xhr) {
+          alert(xhr.responseJSON.message);
+        }
+      })
+    };
+    const unbanUser = (id) => {
+      $.ajax({
+        type: 'POST',
+        url: '/friend/unban',
+        data: {
+          idFriend: +id
+        },
+        success: function(result, err, xhr) {
+          alert(xhr.responseJSON.message);
+        }
+      })
+    };
     const showMoreMessage = () => {
       const groupId = $('#groupid').text();
       const lastId = $('#messlastid').text();
@@ -209,7 +501,7 @@
           }
         })
       }
-    }
+    };
 
     function myFunction() {
       var x = document.getElementById("myLinks");
@@ -225,15 +517,14 @@
     const scrollToTop = () => {
       $('#conversation').scrollTop(0);
     };
-    const showGroup = () => {
-      const groupId = $('.row.sideBar-body .chatgroupidindex').text();
+    const showGroup = (self, groupId, name) => {
       $('#groupid').text(groupId);
       // group name
       $('.conversation .heading-name .heading-name-meta')
-        .text($('.row.sideBar-body .chatgroupnameindex').text());
+        .text(name);
       // group body
       $('#conversation').empty().append(`
-        <span id="chatgroupid" hidden="true">${$('.row.sideBar-body .chatgroupidindex').text()}</span>
+        <span id="chatgroupid" hidden="true">${groupId}</span>
         <div id="messPrevious" class="row message-previous">
             <div class="col-sm-12 previous">
               <a onclick="showMoreMessage()" id="btnShowMoreMessage" name="20">
@@ -393,8 +684,87 @@
         const key = e.which;
         if (key == 13) $('#btnSend').click();
       });
-      $("div[class^='row sideBar-body']").click(showGroup);
-      // $('#btnShowMoreMessage').click(showMoreMessage);
+      $("div[class^='row sideBar-body']").click(function() {
+        const groupId = $(this).find('.chatgroupidindex').text();
+        const name = $(this).find('.chatgroupnameindex').text();
+        showGroup($(this), groupId, name);
+      });
+
+      $('.btnChan').click(function() {
+        if (!confirm('Bạn có chắc muốn bỏ chặn người này không?')) return;
+        $(this).prop('disabled', true);
+        unbanUser($(this).siblings('.id').text());
+      });
+
+      $('.btnAccept').click(function() {
+        $(this).prop('disabled', true);
+        $(this).siblings('.btnCancel').prop('disabled', true);
+        acceptFriend($(this).siblings('.id').text());
+      });
+
+      $('.btnCancel').click(function() {
+        if (!confirm('Bạn có chắc muốn từ chối kết bạn không?')) return;
+        $(this).prop('disabled', true);
+        $(this).siblings('.btnAccept').prop('disabled', true);
+        denyAcceptFriend($(this).siblings('.id').text());
+      });
+
+      $('.btnBan').click(function() {
+        if (!confirm('Bạn có chắc muốn chặn người này không?')) return;
+        $(this).prop('disabled', true);
+        $(this).siblings('.btnUnFriend').prop('disabled', true);
+        banFriend($(this).siblings('.id').text());
+      });
+      $('.btnUnFriend').click(function() {
+        if (!confirm('Bạn có chắc muốn hủy kết bạn không?')) return;
+        $(this).prop('disabled', true);
+        $(this).siblings('.btnBan').prop('disabled', true);
+        unFriend($(this).siblings('.id').text());
+      });
+      $('#grouplastid').text('<%=groups[groupsLen - 1]?.id || 0%>');
+      $('#friendlastid').text('<%=friends[friendsLen - 1]?.id || 0%>');
+      $('#friendwaitlastid').text('<%=friendWaits[friendWaitLen - 1]?.id || 0%>');
+      $('#friendbanlastid').text('<%=friendBans[friendBanLen - 1]?.id || 0%>');
+
+      $('#btnShowMoreGroup').click(() => {
+        showMoreGroup($('#grouplastid').text() || 0);
+      });
+
+      $('#txtFindUser').keydown((e) => {
+        const key = e.which;
+        if (key == 13) {
+          findUser($('#txtFindUser').val());
+        }
+      });
+
+      $('body').on('click', '.btnInvite', function() {
+        if (!confirm('Bạn có chắc muốn gửi lời mời kết bạn không?')) return;
+        $(this).prop('disabled', true);
+        inviteFriend($(this).siblings('.id').text());
+      });
+
+      $('#btnSignOut').click(() => {
+        if (confirm('Bạn có chắc muốn đăng xuất không?')) {
+          // alert('Bạn đã đăng xuất thành công');
+          document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+          window.location.reload();
+        }
+      });
+
+      $("div[class^='friend row sideBar-body']").click(function() {
+        const idFriend = $(this).find('.id').text();
+        const name = $(this).find('.chatgroupnameindex').text();
+        $.ajax({
+          type: 'POST',
+          url: '/group/getorcreatesingle',
+          data: {
+            idFriend: +idFriend
+          },
+          success: function(result, err, xhr) {
+            showGroup($(this), xhr.responseJSON.groupId, name);
+          }
+        })
+      });
     });
   </script>
 </body>
