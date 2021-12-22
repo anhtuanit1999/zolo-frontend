@@ -67,7 +67,6 @@ module.exports = {
         })
       ]);
     } catch (e) {
-      console.log(e.response.data);
       if (e.response.data !== 404) return res.redirect('/auth/signin');
     }
     // console.log(friends.data.data);
