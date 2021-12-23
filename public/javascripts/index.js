@@ -4,7 +4,8 @@ const config = {
   },
   "production": {
     "domain": "https://zolo-backend.herokuapp.com"
-  }
+  },
+  "domain_aws": "https://storage-zolo.s3.ap-southeast-1.amazonaws.com/"
 }
 $(function() {
   $(".heading-compose").click(function() {

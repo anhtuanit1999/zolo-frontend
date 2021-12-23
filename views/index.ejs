@@ -318,7 +318,10 @@
             <textarea class="form-control" rows="1" id="comment"></textarea>
           </div>
           <div class="col-sm-1 col-xs-1 reply-recording">
-            <i id="btnMicro" class="fa fa-microphone fa-2x" aria-hidden="true"></i>
+            <label for="file-upload">
+                <i id="btnMicro" class="fa fa-file fa-2x" aria-hidden="true"></i>
+            </label>
+            <input id="file-upload" type="file" name="file" placeholder="file ảnh" required>
           </div>
           <div id="btnSend" class="col-sm-1 col-xs-1 reply-send">
             <i class="fa fa-send fa-2x" aria-hidden="true"></i>
@@ -329,6 +332,47 @@
   </div>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
   <script>
+    const handleMesss = (mess) => {
+      const domain = config['domain_aws'];
+      if (/.+\.(png|jpg|jpeg)$/i.test(mess)) {
+        return `<div class="message-text">
+                <img src="${domain + mess}" style="width: 150px; height: 150px">
+                </div>`
+      }
+      if (/.+\..{3,4}$/i.test(mess)) {
+        return `<div class="message-text">
+                <a href="${domain + mess}">${mess}</a>
+                </div>`
+      }
+      return `<div class="message-text">
+                ${mess}
+                </div>`
+    }
+    const sendFile = () => {
+      var formData = new FormData();
+      formData.append('file', $('#file-upload')[0].files[0]);
+      let domain = config["<%= process.env.NODE_ENV %>" || "local"].domain;
+      $.ajax({
+        type: 'POST',
+        url: `${domain}/file`,
+        data: formData,
+        processData: false, // tell jQuery not to process the data
+        contentType: false, // tell jQuery not to set contentType
+        success: function(result, err, xhr) {
+          alert(xhr.responseJSON.data.fileName);
+          const data = {
+            chatgroupId: +$('#chatgroupid').text(),
+            userId: +$('#userid').text(),
+            mess: xhr.responseJSON.data.fileName
+          };
+          saveMessage(data);
+          appendMess(xhr.responseJSON.data.fileName, 'sender', new Date());
+          const msg = JSON.stringify(data);
+          socket.emit('chat message', msg);
+          scrollToBottom();
+        }
+      })
+    }
     const unFriend = (id) => {
       $.ajax({
         type: 'POST',
@@ -599,9 +643,7 @@
           `<div class="row message-body">
             <div class="col-sm-12 message-main-${type}">
               <div class="${type}">
-                <div class="message-text">
-                  ${mess}
-                </div>
+                ${handleMesss(mess)}
                 <div class="message-text sender-or-receiver">
                   ${hour}:${minutes}
                 </div>
@@ -618,9 +660,7 @@
                 <div class="message-text sender-or-receiver">
                   ${type == 'receiver' ? header : ''}
                 </div>
-                <div class="message-text">
-                  ${mess}
-                </div>
+                ${handleMesss(mess)}
                 <div class="message-text sender-or-receiver">
                   ${hour}:${minutes}
                 </div>
@@ -645,6 +685,9 @@
     }
     const sendMess = (socket) => {
       const mess = $('#comment').val();
+      if ($('#file-upload').val()) {
+        sendFile();
+      }
       if (mess.trim() !== '') {
         const data = {
           chatgroupId: +$('#chatgroupid').text(),
@@ -657,6 +700,7 @@
         socket.emit('chat message', msg);
         scrollToBottom();
       }
+      $('#file-upload').val('');
       $('#comment').val('');
       $('#comment').focus();
     }
